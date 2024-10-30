@@ -18,7 +18,7 @@ public class Prac1Application {
 	@Autowired
 	ProducerTemplate producerTemplate;
 
-
+// get/test1
 	@GetMapping("test1")
 	public String test1(){
 		var e = producerTemplate.send("direct:my-api-route", p ->{
@@ -27,6 +27,7 @@ public class Prac1Application {
 		return e.getIn().getBody().toString();
 	}
 
+	//post/test2
 	@PostMapping("api2")
 	public Param api2(@RequestBody Param param){
 		return param;

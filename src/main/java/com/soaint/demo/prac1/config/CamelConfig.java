@@ -1,6 +1,8 @@
 package com.soaint.demo.prac1.config;
 
 
+import com.soaint.demo.prac1.model.Address;
+import com.soaint.demo.prac1.model.AllClass;
 import com.soaint.demo.prac1.model.Param;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.Exchange;
@@ -27,18 +29,28 @@ public class CamelConfig extends RouteBuilder {
 //                .bean(FileProcessor.class)
 //                .to("file:/tmp/data/outbox");
 
-       //rest("/test2").get().to("direct:my-api-route")
+       rest("/test2").get().to("direct:my-api-route");
 
         from("direct:my-api-route")
                 //.to("https://regres.in/api/users/1?bridgeEndpoint=true")
                 //                .to("log:DEBUG?showBody=true&showHeaders=
-                .to("https://pocbamoe.free.beeceptor.com/cameltest/api2")
-                .process( e -> {
-                    var msg = e.getIn().getBody(String.class).toUpperCase();
+                .to("https://pocbamoe.free.beeceptor.com/cameltest/api2?bridgeEndpoint=true&httpMethod=GET")
 
+                .unmarshal().json(AllClass.class)
+                .process( e -> {
+                    //var msg = e.getIn().getBody(String.class).toUpperCase();
+                   // var param = new Param();
+                    //param.setValue(msg);
+
+                   AllClass allclass = e.getIn().getBody(AllClass.class);
+
+                   //String formattedAddress  = allclass.getAddress().getStreet().toUpperCase();
+                   //String formattedCompany = allclass.getCompany().;
+                    String combinedValue = formatResponse(allclass);
 
                     var param = new Param();
-                    param.setValue(msg);
+                    param.setValue(combinedValue);
+
                     //ObjectMapper mapper = new ObjectMapper();
                     //String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(param);
                     //e.getIn().setBody(json);
@@ -51,5 +63,13 @@ public class CamelConfig extends RouteBuilder {
                 //                .to("log:DEBUG?showBody=true&showHeaders=true")
                 .to("http://localhost:8080/api2?bridgeEndpoint=true");
 
+    }
+    private String formatResponse(AllClass allclass) {
+        // Aquí puedes crear una representación en cadena del objeto Response
+        // Ejemplo de combinación de valores de una manera más abstracta
+        return "Address: " + allclass.getAddress().getStreet().toUpperCase() +
+                " - company: " + allclass.getCompany().getNameC() +
+                " - root: " + allclass.getRoot().getId() +
+                " - geo: " + allclass.getGeo().getLat();
     }
 }
