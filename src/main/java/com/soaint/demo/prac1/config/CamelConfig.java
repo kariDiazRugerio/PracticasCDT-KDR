@@ -27,20 +27,25 @@ public class CamelConfig extends RouteBuilder {
 //                .bean(FileProcessor.class)
 //                .to("file:/tmp/data/outbox");
 
-//        rest("/test2").get().to("my-api-route");
+       //rest("/test2").get().to("direct:my-api-route")
 
         from("direct:my-api-route")
-                .to("https://regres.in/api/users/1?bridgeEndpoint=true")
-                //                .to("log:DEBUG?showBody=true&showHeaders=true")
+                //.to("https://regres.in/api/users/1?bridgeEndpoint=true")
+                //                .to("log:DEBUG?showBody=true&showHeaders=
+                .to("https://pocbamoe.free.beeceptor.com/cameltest/api2")
                 .process( e -> {
                     var msg = e.getIn().getBody(String.class).toUpperCase();
 
+
                     var param = new Param();
                     param.setValue(msg);
-                    ObjectMapper mapper = new ObjectMapper();
-                    String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(param);
-                    e.getIn().setBody(json);
+                    //ObjectMapper mapper = new ObjectMapper();
+                    //String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(param);
+                    //e.getIn().setBody(json);
+                   e.getIn().setBody(param);
+
                 })
+                .marshal().json()
                 .setHeader(Exchange.HTTP_METHOD, constant("POST"))
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 //                .to("log:DEBUG?showBody=true&showHeaders=true")
