@@ -1,6 +1,6 @@
 package com.soaint.demo.prac1.model;
 
-public class Param {
+/*public class Param {
 
     String value;
 
@@ -11,5 +11,17 @@ public class Param {
     public void setValue(String value) {
         this.value = value;
     }
-}
+}*/
 
+public class Param {
+
+    Root value;
+
+    public Root getValue() {
+        return value;
+    }
+
+    public void setValue(Root value) {
+        this.value = value;
+    }
+}

@@ -5,6 +5,7 @@ import com.soaint.demo.prac1.model.Address;
 import com.soaint.demo.prac1.model.AllClass;
 import com.soaint.demo.prac1.model.Param;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.soaint.demo.prac1.model.Root;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
@@ -36,20 +37,26 @@ public class CamelConfig extends RouteBuilder {
                 //                .to("log:DEBUG?showBody=true&showHeaders=
                 .to("https://pocbamoe.free.beeceptor.com/cameltest/api2?bridgeEndpoint=true&httpMethod=GET")
 
-                .unmarshal().json(AllClass.class)
+                //.unmarshal().json(AllClass.class)
+                .unmarshal().json(Root.class)
                 .process( e -> {
                     //var msg = e.getIn().getBody(String.class).toUpperCase();
                    // var param = new Param();
                     //param.setValue(msg);
 
-                   AllClass allclass = e.getIn().getBody(AllClass.class);
+                    var Objecto = e.getIn().getBody(Root.class);
+                    var param = new Param();
+                    param.setValue(Objecto);
+
+                    //param.setValue(msg);
+                  /* AllClass allclass = e.getIn().getBody(AllClass.class);
 
                    //String formattedAddress  = allclass.getAddress().getStreet().toUpperCase();
                    //String formattedCompany = allclass.getCompany().;
                     String combinedValue = formatResponse(allclass);
 
                     var param = new Param();
-                    param.setValue(combinedValue);
+                    param.setValue(combinedValue);*/
 
                     //ObjectMapper mapper = new ObjectMapper();
                     //String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(param);
